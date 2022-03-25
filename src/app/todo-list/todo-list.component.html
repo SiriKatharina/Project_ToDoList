@@ -8,7 +8,7 @@
     <p>
     <br/>
     Priority: <br/>
-    low | middle | high: <input class="g" placeholder="type in" size="55px" type="text" [(ngModel)]="todoPrio"><br/>
+    low | middle | high: <input class="g" placeholder="type in" size="55px" type="text" [(ngModel)]=" todoPrio"><br/>
     <p>
     <p>
     <br/>
@@ -29,7 +29,7 @@
         <li>
             <button (click)="todoListService.toggleDoneStateById(item.id)" class="button buttonDone">Done</button> 
             <button (click)="todoListService.deleteData(item.id)" class="button buttonLoesch">Delete</button> 
-            {{item.id}} | Priority:{{ item.prio }} |  {{ item.date }} | {{ item.name }}: {{ item.description }}
+            {{item.id}} | Priority:{{ item.prio }} | {{ item.date }} | {{ item.name }}: {{ item.description }}
         </li>
     </ng-container>
 </ul>
