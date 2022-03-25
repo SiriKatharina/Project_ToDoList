@@ -1,0 +1,45 @@
+ul {
+  position: fixed;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 0 40px;
+  width: 100%;
+  background-color: #9cb8af;
+  color: azure;
+  height: 40px;
+  line-height: 40px;
+}
+
+li {
+  display: inline;
+  margin-right: 40px;
+  color: azure;
+}
+
+main {
+  margin-top: 40px;
+  padding: 40px;
+}
+
+.list { 
+  float:inline-start; 
+  width: 72%; 
+  margin-right: 2%; 
+  margin-left: 3%; 
+  padding: 20px; 
+  background: #eee; 
+  box-sizing: border-box; 
+}
+
+.list:last-child { margin-right: 0; }
+
+.dash { 
+  float: right; 
+  width: 32%; 
+  margin-right: 12%; 
+  padding: 20px; 
+  box-sizing: border-box; 
+}
+
+.dash:last-child { margin-right: 0; }

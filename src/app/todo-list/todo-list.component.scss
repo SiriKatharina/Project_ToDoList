@@ -1,0 +1,114 @@
+div.addItem{
+  background-color:#9cb8af;
+}
+
+button{
+  border: none;
+  color: azure;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  border-radius: 4px;
+}
+
+.buttonHinzu {
+  padding: 5px 15px;
+  margin: 5px;
+  background-color: #333333;
+  display: inline-block;
+  border-radius: 4px;
+  border: none;
+  color: #FFFFFF;
+  text-align: center;
+  font-size: 14px;
+  width: 130px;
+  transition: all 0.5s;
+  cursor: pointer;
+}
+.buttonHinzu span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.buttonHinzu span:after {
+  content: '\00bb';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+  background-color: white;
+  color: black;
+}
+
+.buttonHinzu:hover span {
+  padding-right: 25px;
+  background-color: white;
+  color: black;
+}
+
+.buttonHinzu:hover span:after {
+  opacity: 1;
+  right: 0;
+  background-color: white;
+  color: black;
+}
+
+.buttonHinzu:hover{
+  background-color: white;
+  color: black;
+}
+
+
+
+.buttonDone {
+  padding: 5px 15px;
+  margin: 2px;
+  opacity: 0.8;
+  background-color: #2d373a;; /* Green */
+}
+
+.buttonDone:hover{
+  opacity: 1;
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+}
+
+.buttonLoesch {
+  padding: 5px 15px;
+  margin: 2px;
+  opacity: 0.8;
+  background-color: #92550f;; /* Green */
+}
+
+.buttonLoesch:hover{
+  opacity: 1;
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+}
+
+.addItem{
+  size : 25%;
+  padding: 5px 15px;
+  margin: 5px;
+  text-align:start;
+  text-decoration:none;
+  display: inline-block;
+  font-size: 14px;
+  border-radius: 10px;
+}
+
+.name{
+  margin: 5px;
+}
+
+.beschreibung{
+  size: 50px;
+  margin: 5px;
+  text-align:start;
+}
+
+.prio1{
+  
+}

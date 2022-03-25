@@ -1,0 +1,46 @@
+<br/>
+<h2>Todos</h2>
+
+<div class="addItem">
+    Name: <br/><input class="name" size="75px" type="text" [(ngModel)]="todoName"><br/>
+    Beschreibung:<br/><input class="beschreibung"  size="75%" type="text" [(ngModel)]="todoDescription"> 
+    <p>
+    <p>
+    <br/>
+    Priorität: <br/>
+    gering(1) | mittel(2) | hoc(3): <input class="g" placeholder="type in" size="55px" type="text" [(ngModel)]="todoPrio"><br/>
+    <p>
+    <p>
+    <br/>
+    <input type="date" [(ngModel)]="todoDueDate"> 
+    <button (click)="addTodo()" class="button buttonHinzu"><span>Hinzufügen</span></button>
+</div>
+<br/>
+<br/>
+<br/>
+<br/>
+<input type="search" size="30" placeholder="Suche">
+<p>Done anzeigen: <input type="checkbox" [(ngModel)]="showDone"></p>
+
+
+<p>List</p>
+<ul>
+    <ng-container *ngFor="let item of todolist">
+        <li>
+            <button (click)="todoListService.toggleDoneStateById(item.id)" class="button buttonDone">Done</button> 
+            <button (click)="todoListService.deleteData(item.id)" class="button buttonLoesch">Löschen</button> 
+            {{item.id}} | Prio:{{ item.prio }} |  {{ item.date }} | {{ item.name }}: {{ item.description }}
+        </li>
+    </ng-container>
+</ul>
+<p>End</p>
+
+<!--
+<div *ngFor="let item of todoListService.getTodos(showDone ? undefined : false)">
+    <button (click)="todoListService.toggleDoneStateById(item.id)" class="button buttonDone">Done</button> 
+    <button (click)="todoListService.deleteTodoById(item.id)" class="button buttonLoesch">Löschen</button> 
+    <span [ngStyle]="{'text-decoration': (item.doneDate ? 'line-through' : 'none')}">{{ item.dueDate | date:'EE, dd.MM.' }} | {{ item.name }}: {{ item.description }} | prio: {{ item.prio}}</span>
+</div>
+
+<p>Todo: {{ todoListService.getTodos(false).length }}<br/>Done: {{ todoListService.getTodos(true).length }}</p>
+-->
