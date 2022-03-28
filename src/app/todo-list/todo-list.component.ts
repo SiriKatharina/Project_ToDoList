@@ -61,6 +61,16 @@ export class TodoListComponent implements OnInit {
       this.todoDueDate = formatDate(new Date(), 'yyyy-MM-dd', 'en');
     }
   }
+
+  public deleteTodo(id :number): void {
+    this.todoListService.deleteData(id).subscribe(
+      {
+        next: (v) => this.getPosts(),
+        error: (e) => console.error(e),
+        complete: () => console.info('complete') 
+       }
+      )
+  }
 }
 
     

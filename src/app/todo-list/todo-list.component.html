@@ -1,4 +1,3 @@
-<br/>
 <h2>ToDos</h2>
 
 <div class="addItem">
@@ -14,6 +13,7 @@
     <br/>
     <input type="date" [(ngModel)]="todoDueDate"> 
     <button (click)="addTodo()" class="button buttonHinzu"><span>Submit</span></button>
+    
 </div>
 <br/>
 <br/>
@@ -21,14 +21,15 @@
 <br/>
 <input type="search" size="30" placeholder="Suche">
 <p>DONE: <input type="checkbox" [(ngModel)]="showDone"></p>
-
+ 
 
 <p>To-Do-List</p>
 <ul>
     <ng-container *ngFor="let item of todolist">
         <li>
-            <button (click)="todoListService.toggleDoneStateById(item.id)" class="button buttonDone">Done</button> 
-            <button (click)="todoListService.deleteData(item.id)" class="button buttonLoesch">Delete</button> 
+           <button (click)="todoListService.toggleDoneStateById(item.id)" class="button buttonDone">Done</button>
+           <button (click)="deleteTodo(item.id)" class="button buttonLoesch">Löschen</button> 
+           <!--<button (click)="removeTodo()" class="button buttonHinzu"><span>Submit</span></button>-->
             {{item.id}} | Priority:{{ item.prio }} | {{ item.date }} | {{ item.name }}: {{ item.description }}
         </li>
     </ng-container>

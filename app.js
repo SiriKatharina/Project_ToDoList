@@ -57,7 +57,7 @@ app.put('/todoelements/:id', (req, res)=> {
 
   client.query(updateQuery, (err, result)=>{
       if(!err){
-          res.send('Update was successful')
+        res.json({"message": "Update was successful"});
       }
       else{ console.log(err.message) }
   })
@@ -69,7 +69,7 @@ app.delete('/todoelements/:id', (req, res)=> {
 
   client.query(insertQuery, (err, result)=>{
       if(!err){
-          res.send('Deletion was successful')
+        res.json({"message": "Deletion was successful"});
       }
       else{ console.log(err.message) }
   })

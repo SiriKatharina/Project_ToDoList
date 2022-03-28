@@ -36,8 +36,8 @@ export class TodoListService {
   } 
 
    /** DELETE: delete a todo from the database*/
-   deleteData(todo:Todo) : Observable<Todo[]> {
-    return this.http.delete<any[]>(`${"http://localhost:3300/todoelements"}/${this.todos}`);
+   deleteData(id:number) : Observable<any> {
+    return this.http.delete(`${"http://localhost:3300/todoelements"}/${id}`);
     } 
 
   
