@@ -16,6 +16,8 @@ export class TodoListComponent implements OnInit {
   public showDone = false;
   todo = {name}
   todolist:any;
+  updateMode = false;
+  editedItemId = 0;
   constructor(public todoListService: TodoListService) { }
 
   ngOnInit(): void {
@@ -42,6 +44,7 @@ export class TodoListComponent implements OnInit {
   }
   public addTodo(): void {
     if (this.todoDescription && this.todoDueDate) {
+      if(!this.updateMode) {
       let todo = {name : '', description: '', prio:'', date:''};
       todo.name = this.todoName;
       todo.description = this.todoDescription;
@@ -59,6 +62,9 @@ export class TodoListComponent implements OnInit {
       this.todoDescription = '';
       this.todoPrio = '';
       this.todoDueDate = formatDate(new Date(), 'yyyy-MM-dd', 'en');
+        } else {
+          this.updateTodo(this.editedItemId);
+        }
     }
   }
 
@@ -70,6 +76,48 @@ export class TodoListComponent implements OnInit {
         complete: () => console.info('complete') 
        }
       )
+  }
+
+  editTodo(todo:any) {
+    this.todoName = todo.name;
+    this.todoDescription = todo.description;
+    this.todoPrio = todo.prio;
+    this.todoDueDate = todo.date;
+    this.editedItemId = todo.id;
+    this.updateMode = true;
+  }
+
+  toggleStatus(todo:any){
+    let id = todo.id;
+    let status = todo.status == 0 ? 1 :0;
+    this.todoListService.updateStatus(id,status).subscribe(
+      {
+        next: (v) => this.getPosts(),
+        error: (e) => console.error(e),
+        complete: () => console.info('complete') 
+       }
+      )
+  }
+
+  updateTodo(id:any) {
+    if (this.todoDescription && this.todoDueDate) {
+      let todo = {id :id, name : this.todoName, description: this.todoDescription, prio:this.todoPrio, date:this.todoDueDate};
+      this.todoListService.updateData(todo).subscribe(
+        {
+          next: (v) => {this.getPosts(); 
+            this.updateMode = false;
+            this.todoName = '';
+            this.todoDescription = '';
+            this.todoPrio = '';
+            this.todoDueDate = formatDate(new Date(), 'yyyy-MM-dd', 'en');
+          },
+          error: (e) => console.error(e),
+          complete: () => console.info('complete') 
+         }
+        )
+      //this.todoListService.postData(this.todoName, this.todoDescription, this.todoPrio, new Date(this.todoDueDate));
+     
+    }
   }
 }
 

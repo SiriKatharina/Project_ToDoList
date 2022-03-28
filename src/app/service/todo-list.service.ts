@@ -31,8 +31,9 @@ export class TodoListService {
   } 
 
  /** PUT: update a todo in the database*/
- updateData(todo:Todo) : Observable<Todo[]> {
-  return this.http.put<any[]>(`$"{http://localhost:3300/todoelements"}/${this.todos}`, todo);
+ updateData(todo:any) : Observable<any> {
+   console.log(todo.id);
+  return this.http.put(`${"http://localhost:3300/todoelements"}/${todo.id}`, todo,{'headers': this.headers});
   } 
 
    /** DELETE: delete a todo from the database*/
@@ -40,6 +41,10 @@ export class TodoListService {
     return this.http.delete(`${"http://localhost:3300/todoelements"}/${id}`);
     } 
 
+      /** DELETE: delete a todo from the database*/
+   updateStatus(id:number, status:number) : Observable<any> {
+    return this.http.put(`${"http://localhost:3300/todoelements/updatestatus"}/${id}/${status}`, null,{'headers': this.headers});
+    } 
   
 /*
   public getTodos(done?: boolean): Todo[] {

@@ -14,7 +14,7 @@ app.listen(3300, ()=>{
 })
 
 app.get('/todoelements',(req, res)=>{
-  client.query(`Select * from todoelements`, (err, result)=>{
+  client.query(`Select * from todoelements order by id desc`, (err, result)=>{
       if(!err){
         res.send(result.rows);
       } 
@@ -58,6 +58,21 @@ app.put('/todoelements/:id', (req, res)=> {
   client.query(updateQuery, (err, result)=>{
       if(!err){
         res.json({"message": "Update was successful"});
+      }
+      else{ console.log(err.message) }
+  })
+  client.end;
+})
+
+app.put('/todoelements/updatestatus/:id/:status', (req, res)=> {
+  let todo = req.body;
+  let updateQuery = `update todoelements
+                     set status = '${req.params.status}'
+                     where id = ${req.params.id}`
+
+  client.query(updateQuery, (err, result)=>{
+      if(!err){
+        res.json({"message": "update status was successful"});
       }
       else{ console.log(err.message) }
   })
