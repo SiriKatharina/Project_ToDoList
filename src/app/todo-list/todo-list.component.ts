@@ -82,7 +82,7 @@ export class TodoListComponent implements OnInit {
     this.todoName = todo.name;
     this.todoDescription = todo.description;
     this.todoPrio = todo.prio;
-    this.todoDueDate = todo.date;
+    this.todoDueDate = formatDate(new Date(todo.date), 'yyyy-MM-dd', 'en');
     this.editedItemId = todo.id;
     this.updateMode = true;
   }
