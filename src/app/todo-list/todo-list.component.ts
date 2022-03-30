@@ -18,12 +18,12 @@ export class TodoListComponent implements OnInit, AfterViewInit {
   public todoDueDate = formatDate(new Date(), 'yyyy-MM-dd', 'en');
   public showDone = false;
   todo = { name }
-  todolist: any;
+  todolist: any[] = [];
   // todolist: any[] = [{ id: 1, name: 'Test', description: 'Test description', prio: 'high', status: 0 },
   // { id: 2, name: 'Test', description: 'Test description', prio: 'high', status: 0 }];
   updateMode = false;
   editedItemId = 0;
-  displayedColumns = ['id', 'name', 'description', 'priority', 'actions'];
+  displayedColumns = ['id', 'name', 'description', 'priority', 'date', 'actions'];
   dataSource: MatTableDataSource<Todo>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -31,13 +31,15 @@ export class TodoListComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.getPosts();
-    this.dataSource = new MatTableDataSource(this.todolist);
   }
 
   getPosts() {
     this.todoListService.getData().subscribe(
       todolists => {
         this.todolist = todolists;
+        this.dataSource = new MatTableDataSource(this.todolist);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
       }
     );
   }
@@ -124,8 +126,7 @@ export class TodoListComponent implements OnInit, AfterViewInit {
    * be able to query its view for the initialized paginator and sort.
    */
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+   
   }
 }
 

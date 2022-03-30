@@ -14,7 +14,7 @@ app.listen(3300, ()=>{
 })
 
 app.get('/todoelements',(req, res)=>{
-  client.query(`SELECT id, name, description, prio, TO_CHAR(date, 'yyyy-mm-dd') as date FROM todoelements order by id desc`, (err, result)=>{
+  client.query(`SELECT id, name, description, prio, TO_CHAR(date, 'yyyy-mm-dd') as date, status FROM todoelements order by id desc`, (err, result)=>{
       if(!err){
         res.send(result.rows);
       } 
