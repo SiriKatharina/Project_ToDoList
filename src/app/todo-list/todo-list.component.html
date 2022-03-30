@@ -1,47 +1,72 @@
 <h2>ToDos</h2>
 
 <div class="addItem">
-    Name: <br/><input class="name" size="75px" type="text" [(ngModel)]="todoName"><br/>
-    Description:<br/><input class="beschreibung"  size="75%" type="text" [(ngModel)]="todoDescription"> 
-    <p>
-    <p>
-    <br/>
-      
-    <!-- <input class="g" placeholder="type in" size="55px" type="text" [(ngModel)]=" todoPrio"><br/>-->
-    <form name="Testform"><label type="text">please select the urgency of the task:</label>
-      <select [(ngModel)]="todoPrio" type="text" name="todo" id="todo" size="1">
-        <option value="Low">Low </option>
-        <option value="Middle">Middle</option>
-        <option value="High">High</option>
-      </select>
-    </form>
-    <p>
-      <output> </output>
-    </p>
-   
-    <p>
-    <p>
-    <br/>
-    <input type="date" [(ngModel)]="todoDueDate"> 
-    <button (click)="addTodo()" class="button buttonHinzu"><span>{{ updateMode ? 'Update' : 'Submit'}}</span></button>
-    
+  Name <br /><input class="name" size="75px" type="text" [(ngModel)]="todoName"><br />
+  Description<br /><textarea id="w3review" [(ngModel)]="todoDescription" name="w3review" rows="4" cols="50"> </textarea>
+  <br />
+  <!-- <input class="g" placeholder="type in" size="55px" type="text" [(ngModel)]=" todoPrio"><br/>-->
+  <form name="Testform"><label type="text">Please select the urgency of the task</label>
+    <select [(ngModel)]="todoPrio" type="text" name="todo" id="todo" size="1">
+      <option value="Low">Low </option>
+      <option value="Middle">Middle</option>
+      <option value="High">High</option>
+    </select>
+  </form>
+  Date <br /><input type="date" [(ngModel)]="todoDueDate">
+
+  <button (click)="addTodo()" class="button buttonHinzu"><span>{{ updateMode ? 'Update' : 'Submit'}}</span></button>
+
 </div>
-<br/>
-<br/>
+<br />
+<br />
 
 
 <p>To-Do-List</p>
-<ul>
-    <ng-container *ngFor="let item of todolist">
-        <li>
-           <button (click)="toggleStatus(item)" class="button buttonDone">{{ item.status == 0 ? 'Done' : 'Undone'}}</button>
-           <button (click)="deleteTodo(item.id)" class="button buttonLoesch">Delete</button> 
-           <button (click)="editTodo(item)" class="button buttontodo">Edit</button> 
-           <!--<button (click)="removeTodo()" class="button buttonHinzu"><span>Submit</span></button>-->
-            {{item.id}} | Priority: {{ item.prio }} | {{ item.date }} | {{ item.name }}: {{ item.description }}
-        </li>
+<div class="example-container mat-elevation-z8">
+
+  <mat-table [dataSource]="dataSource" matSort>
+
+    <!-- ID Column -->
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> ID </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
     </ng-container>
-</ul>
+
+    <!-- Progress Column -->
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.name}} </mat-cell>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="description">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Description </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.description}} </mat-cell>
+    </ng-container>
+
+    <!-- Color Column -->
+    <ng-container matColumnDef="priority">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Priority </mat-header-cell>
+      <mat-cell *matCellDef="let row" [style.color]="row.color"> {{row.prio}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Actions </mat-header-cell>
+      <mat-cell *matCellDef="let row" [style.color]="row.color">
+        <button (click)="toggleStatus(row)" class="button buttonDone">{{ row.status == 0 ? 'Done' : 'Undone'}}</button>
+        <button (click)="deleteTodo(row.id)" class="button buttonLoesch">Delete</button>
+        <button (click)="editTodo(row)" class="button buttontodo">Edit</button>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;">
+    </mat-row>
+  </mat-table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+</div>
+
 
 <!--
 <div *ngFor="let item of todoListService.getTodos(showDone ? undefined : false)">
