@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Todo } from '../service/todo';
 import { TodoListService } from '../service/todo-list.service';
 import { formatDate } from '@angular/common';
@@ -11,14 +11,13 @@ import { MatSort } from '@angular/material/sort';
   templateUrl: './todo-list.component.html',
   styleUrls: ['./todo-list.component.scss']
 })
-export class TodoListComponent implements OnInit, AfterViewInit {
+export class TodoListComponent implements OnInit {
   public todoName = '';
   public todoDescription = '';
   public todoPrio = 'Low';
   public todoDueDate = formatDate(new Date(), 'yyyy-MM-dd', 'en');
   public showDone = false;
-  todo = { name }
-  todolist: any;
+  todolist: any[];
   // todolist: any[] = [{ id: 1, name: 'Test', description: 'Test description', prio: 'high', status: 0 },
   // { id: 2, name: 'Test', description: 'Test description', prio: 'high', status: 0 }];
   updateMode = false;
@@ -31,13 +30,15 @@ export class TodoListComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.getPosts();
-    this.dataSource = new MatTableDataSource(this.todolist);
   }
 
   getPosts() {
     this.todoListService.getData().subscribe(
       todolists => {
         this.todolist = todolists;
+        this.dataSource = new MatTableDataSource(this.todolist);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
       }
     );
   }
@@ -53,8 +54,7 @@ export class TodoListComponent implements OnInit, AfterViewInit {
         this.todoListService.postData(todo).subscribe(
           {
             next: (v) => this.getPosts(),
-            error: (e) => console.error(e),
-            complete: () => console.info('complete')
+            error: (e) => console.error(e)
           }
         );
         this.resetForm();
@@ -68,8 +68,7 @@ export class TodoListComponent implements OnInit, AfterViewInit {
     this.todoListService.deleteData(id).subscribe(
       {
         next: (v) => this.getPosts(),
-        error: (e) => console.error(e),
-        complete: () => console.info('complete')
+        error: (e) => console.error(e)
       }
     )
   }
@@ -89,8 +88,7 @@ export class TodoListComponent implements OnInit, AfterViewInit {
     this.todoListService.updateStatus(id, status).subscribe(
       {
         next: (v) => this.getPosts(),
-        error: (e) => console.error(e),
-        complete: () => console.info('complete')
+        error: (e) => console.error(e)
       }
     )
   }
@@ -105,8 +103,7 @@ export class TodoListComponent implements OnInit, AfterViewInit {
             this.updateMode = false;
             this.resetForm();
           },
-          error: (e) => console.error(e),
-          complete: () => console.info('complete')
+          error: (e) => console.error(e)
         }
       );
     }
@@ -117,15 +114,6 @@ export class TodoListComponent implements OnInit, AfterViewInit {
     this.todoDescription = '';
     this.todoPrio = '';
     this.todoDueDate = formatDate(new Date(), 'yyyy-MM-dd', 'en');
-  }
-
-  /**
-   * Set the paginator and sort after the view init since this component will
-   * be able to query its view for the initialized paginator and sort.
-   */
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
   }
 }
 
