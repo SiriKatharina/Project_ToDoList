@@ -84,21 +84,22 @@ describe('TodoListComponent', () => {
   });
 
   it('should add a new todo to the todo-List over a post', fakeAsync(() => {
-    let todoListService = fixture.debugElement.injector.get(TodoListService);
+    let todoListService = fixture.debugElement.injector.get(TodoListService); // mock from the class TodoListService
     let stub = spyOn(todoListService, 'postData').and.callFake(() => {
       return of({"message": "Insertion was successful"}).pipe(delay(300));
     })
-    component.addTodo(); //--> call the Method add a todo
-    tick(300);
-    //fixture.detectChanges();
-    //const compiled = fixture.debugElement.nativeElement;
-   stub.calls.mostRecent().returnValue.subscribe({
+    stub.calls.mostRecent().returnValue.subscribe({
       next: (v) => {
         component.addTodo();
       }, error: (e) => console.error(e)
     });
+    //component.addTodo(); //--> call the Method add a todo
+    tick(300);
+    //fixture.detectChanges();
+    //const compiled = fixture.debugElement.nativeElement;
+   
     //expect(compiled.innerHTML).toContain([{"message": "Insertion was successful"}]);
-    expect(component.todolist).toEqual([{message: "Insertion was successful"}]);
+    expect(component.addTodo).toEqual([{message: "Insertion was successful"}]); // what should I expected?
   })); //--> equal to the String? possible? 
 
 
