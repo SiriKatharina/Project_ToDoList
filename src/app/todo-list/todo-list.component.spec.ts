@@ -10,6 +10,8 @@ import { Todo } from '../service/todo';
 
 import { TodoListComponent } from './todo-list.component';
 import { By } from '@angular/platform-browser';
+import { throwError } from 'rxjs';
+import { error } from 'console';
 
 describe('TodoListComponent', () => {
   let component: TodoListComponent;
@@ -28,6 +30,8 @@ describe('TodoListComponent', () => {
       // providers: [{ provide: TodoListService, useValue: todolistServiceSpyObj }]
     })
       .compileComponents();
+
+    // fixture.detectChanges();
     //todolistServiceSpy = TestBed.get(TodoListService);
   });
 
@@ -68,7 +72,7 @@ describe('TodoListComponent', () => {
   //     }
   //   });
 
-  it('should delte a todo', () => {
+  it('should delete a todo & return success', () => {
     let todoListService = fixture.debugElement.injector.get(TodoListService);
     spyOn(todoListService, 'deleteData').and.returnValue(of({ 'message': 'Deltetion was successful' }));
     spyOn(component, 'getPosts');
@@ -77,6 +81,13 @@ describe('TodoListComponent', () => {
 
     expect(todoListService.deleteData).toHaveBeenCalled();
     expect(component.getPosts).toHaveBeenCalled();
+  })
+
+  it('should delete a todo & return error', () => {
+    let todoListService = fixture.debugElement.injector.get(TodoListService);
+    spyOn(todoListService, 'deleteData').and.returnValue(throwError(() => new Error('Error')));
+    component.deleteTodo(1);
+    expect(todoListService.deleteData).toHaveBeenCalled();
   })
 
   //expect('').toEqual('');
@@ -98,25 +109,65 @@ describe('TodoListComponent', () => {
   expect(mockSpy.deleteTodo).toHaveBeenCalledTimes(1);*/
   //});
 
-  // it('should add a new todo to the todo-List over a post', fakeAsync(() => {
-  //   let todoListService = fixture.debugElement.injector.get(TodoListService); // mock from the class TodoListService
-  //   let stub = spyOn(todoListService, 'postData').and.callFake(() => {
-  //     return of({ "message": "Insertion was successful" }).pipe(delay(300));
-  //   })
-  //   stub.calls.mostRecent().returnValue.subscribe({
-  //     next: (v) => {
-  //       component.addTodo();
-  //     }, error: (e) => console.error(e)
-  //   });
-  //   //component.addTodo(); //--> call the Method add a todo
-  //   tick(300);
-  //   //fixture.detectChanges();
-  //   //const compiled = fixture.debugElement.nativeElement;
+  it('should add a new todo to the todo-List over a post & return SUCCESS', fakeAsync(() => {
+    let todoListService = fixture.debugElement.injector.get(TodoListService); // mock from the class TodoListService
+    spyOn(todoListService, 'postData').and.returnValue(of({ 'message': 'Insertion was successful' }));;
+    console.log(component.updateMode);
+    spyOn(component, 'getPosts');
+    component.todoDescription = 'new';
+    component.todoDueDate = '20/12/2022';
+    component.addTodo();
+    expect(component.todoDescription).toBeDefined();
+    expect(component.todoDueDate).toBeDefined();
+    expect(component.updateMode).toEqual(false);
+    tick(3000);
+    expect(todoListService.postData).toHaveBeenCalled();
+    expect(component.getPosts).toHaveBeenCalled();
+  }));
 
-  //   //expect(compiled.innerHTML).toContain([{"message": "Insertion was successful"}]);
-  //   expect(component.addTodo).toEqual([{ message: "Insertion was successful" }]); // what should I expected?
-  // })); //--> equal to the String? possible? 
 
+  it('should add a new todo to the todo-List over a post & return ERROR', fakeAsync(() => {
+    let todoListService = fixture.debugElement.injector.get(TodoListService); // mock from the class TodoListService
+    spyOn(todoListService, 'postData').and.returnValue(throwError(() => new Error('Error')));;
+    component.todoDescription = 'new';
+    component.todoDueDate = '20/12/2022';
+    component.addTodo();
+    expect(component.todoDescription).toBeDefined();
+    expect(component.todoDueDate).toBeDefined();
+
+    tick(3000);
+    expect(todoListService.postData).toHaveBeenCalled();
+    expect(component.updateMode).toEqual(false);
+  }));
+
+  it('should Update an existing todo over a put & return ERROR', fakeAsync(() => {
+    let todoListService = fixture.debugElement.injector.get(TodoListService); // mock from the class TodoListService
+    let todo = { id: 1, name: "test", description: "testD", prio: "1", date: "01.03.22", status: 1 };
+    component.editTodo(todo);
+    spyOn(todoListService, 'updateData').and.returnValue(throwError(() => new Error('Error')));;
+    component.addTodo();
+    expect(component.todoDescription).toBeDefined();
+    expect(component.todoDueDate).toBeDefined();
+    expect(component.updateMode).toEqual(true);
+    tick(3000);
+    expect(todoListService.updateData).toHaveBeenCalled();
+  }));
+
+  it('should Update an existing todo over a put & return SUCCESS', fakeAsync(() => {
+    let todoListService = fixture.debugElement.injector.get(TodoListService); // mock from the class TodoListService
+    spyOn(todoListService, 'updateData').and.returnValue(of({ message: 'Update was successful' }));;
+    spyOn(component, 'getPosts');
+    let todo = { id: 1, name: "test", description: "testD", prio: "1", date: "01.03.22", status: 1 };
+    component.editTodo(todo);
+    console.log('update Mode is ' + component.updateMode);
+    component.addTodo();
+    expect(component.todoDescription).toBeDefined();
+    expect(component.todoDueDate).toBeDefined();
+    tick(3000);
+    expect(todoListService.updateData).toHaveBeenCalled();
+    expect(component.getPosts).toHaveBeenCalled();
+    expect(component.updateMode).toEqual(false);
+  }));
 
   it('should RESET Form', () => {
     component.resetForm();
@@ -136,28 +187,33 @@ describe('TodoListComponent', () => {
     expect(component.updateMode).toEqual(true);
   });
 
-  // it('update todo, should save the new data in the database from the updated todo', fakeAsync(() => {
-  //   let todoListService = fixture.debugElement.injector.get(TodoListService);
-  //   let stub = spyOn(todoListService, 'postData').and.callFake(() => {
-  //     return of({ "message": "Update was successful" }).pipe(delay(300));
-  //   })
-  //   let todo = { id: 1, name: "test", description: "testD", prio: "1", date: 2022 - 22 - 10, status: 0 };
-  //   component.updateTodo(todo); //--> call the Method add a todo
-  //   tick(300);
-  //   stub.calls.mostRecent().returnValue.subscribe({
-  //     next: (v) => {
-  //       component.updateTodo(todo);
-  //     }, error: (e) => console.error(e)
-  //   });
-  //   expect(component.todolist).toEqual([{ "message": "Update was successful" }]);
-  // }));
-
-
-  it('should toggle the Status in a todo', () => {
-    let todo = { id: 1, status: 1 };
+  it('should toggle the Status of a todo to Done & return SUCCESS', () => {
+    let todoListService = fixture.debugElement.injector.get(TodoListService);
+    spyOn(todoListService, 'updateStatus').and.returnValue(of({ 'message': 'update status was successful' }));
+    spyOn(component, 'getPosts');
+    let todo = { id: 1, status: 0 };
     component.toggleStatus(todo);
-    expect(component.showDone).toEqual(false);
+    expect(todoListService.updateStatus).toHaveBeenCalled();
+    expect(component.getPosts).toHaveBeenCalled();
   });
 
+  it('should toggle the Status of a todo to UnDone & return SUCCESS', () => {
+    let todoListService = fixture.debugElement.injector.get(TodoListService);
+    spyOn(todoListService, 'updateStatus').and.returnValue(of({ 'message': 'update status was successful' }));
+    spyOn(component, 'getPosts');
+    let todo = { id: 1, status: 1 };
+    component.toggleStatus(todo);
+    expect(todoListService.updateStatus).toHaveBeenCalled();
+    expect(component.getPosts).toHaveBeenCalled();
+  });
+
+  it('should toggle the Status in a todo & return ERROR', () => {
+    let todoListService = fixture.debugElement.injector.get(TodoListService);
+    spyOn(todoListService, 'updateStatus').and.returnValue(throwError(() => new Error('Error')));
+    let todo = {};
+    component.toggleStatus(todo);
+    expect(todoListService.updateStatus).toHaveBeenCalled();
+
+  });
 
 });

@@ -44,8 +44,10 @@ export class TodoListComponent implements OnInit {
   }
 
   public addTodo(): void {
+
     if (this.todoDescription && this.todoDueDate) {
       if (!this.updateMode) {
+
         let todo = { name: '', description: '', prio: '', date: '' };
         todo.name = this.todoName;
         todo.description = this.todoDescription;
@@ -68,7 +70,7 @@ export class TodoListComponent implements OnInit {
     this.todoListService.deleteData(id).subscribe(
       {
         next: (v) => this.getPosts(),
-        error: (e) => console.error(e)
+        error: (e) => console.log(e)
       }
     )
   }
